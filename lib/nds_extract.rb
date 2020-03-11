@@ -1,5 +1,6 @@
 # Provided, don't edit
 require 'directors_database'
+require 'pp'
 
 # A method we're giving you. This "flattens"  Arrays of Arrays so: [[1,2],
 # [3,4,5], [6]] => [1,2,3,4,5,6].
@@ -34,6 +35,7 @@ end
 # Your code after this point
 
 def movies_with_director_key(name, movies_collection)
+  pp
   # GOAL: For each Hash in an Array (movies_collection), provide a collection
   # of movies and a directors name to the movie_with_director_name method
   # and accumulate the returned Array of movies into a new Array that's
@@ -48,6 +50,16 @@ def movies_with_director_key(name, movies_collection)
   # Array of Hashes where each Hash represents a movie; however, they should all have a
   # :director_name key. This addition can be done by using the provided
   # movie_with_director_name method
+  
+  collection_of_movies = []
+  i = 0
+  
+  while i < movies_collection.length do
+    movie_data = movies_collection[i]
+    collection_of_movies.push(movie_with_director_name(name, movie_data))
+    i += 1
+  end
+  collection_of_movies
 end
 
 
@@ -63,6 +75,22 @@ def gross_per_studio(collection)
   #
   # Hash whose keys are the studio names and whose values are the sum
   # total of all the worldwide_gross numbers for every movie in the input Hash
+  total_ww_gross = {}
+  i = 0
+  
+  while i < collection.length do
+    movie = collection[i]
+    
+    if !total_ww_gross[movie[:studio]]
+      total_ww_gross[movie[:studio]] = movie[:worldwide_gross]
+    else
+      total_ww_gross[movie[:studio]] += movie[:worldwide_gross]  
+    end
+    
+    i += 1
+  end
+  
+  total_ww_gross
 end
 
 def movies_with_directors_set(source)
@@ -76,6 +104,19 @@ def movies_with_directors_set(source)
   #
   # Array of Arrays containing all of a director's movies. Each movie will need
   # to have a :director_name key added to it.
+  
+  directors_movies = []
+  i = 0;
+  
+  while i < source.length do
+    director_info = source[i]
+    directors_name = director_info[:name]
+    directors_titles = director_info[:movies]
+    directors_movies.push(movies_with_director_key(directors_name, directors_titles))
+    
+    i += 1
+  end
+  directors_movies
 end
 
 # ----------------    End of Your Code Region --------------------
